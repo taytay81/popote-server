@@ -9,7 +9,8 @@ const tagSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ["ingredient", "allergy", "intolerance", "diet", "course", "flavor"],
+        enum: ["ingredient", "allergy", "intolerance", "diet", "cuisine", "course"],
+        // flqvor qnd course were replaced by cuisine here but we can change back if we find a different api
         required: true
     }
 })
