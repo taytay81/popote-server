@@ -1,98 +1,78 @@
 require("dotenv").config();
 require("../config/mongo");
+//DB MODEL IMPORT
 const ingredientModel = require("../models/Ingredient");
-const axios = require("axios");
+const userModel = require("../models/User");
+const tagModel = require("../models/Tag");
 const recipeModel = require("../models/Recipe");
 
-const ingredientNames = require("./ingredientSeed");
-const recipesToClean = require("./recipeSeed");
+//OBJECT IMPORT
+const ingredientNames = require("./seedObjects/ingredientSeeds");
+const recipesToClean = require("./seedObjects/recipeSeed");
+const recipeDetails = require("./seedObjects/recipeDetailsSeeds");
+const tagSeeds = require("./seedObjects/tagSeeds");
+const userSeeds = require("./seedObjects/userSeeds");
 
-const users = [
-  {
-    avatar: "",
-    name: "andrew",
-    email: "and@pot.com",
-    password: 123,
-    tags: [],
-    favorites: []
-  },
-  {
-    avatar: "",
-    name: "taytay",
-    email: "tay@pot.com",
-    password: "321",
-    tags: [],
-    favorites: []
-  },
-  {
-    avatar: "",
-    name: "pierre",
-    email: "try@pot.com",
-    password: 213,
-    tags: [],
-    favorites: []
-  }
-];
-
-const tag = [
-  {
-    name: "vegetarian",
-    type: "diet"
-  },
-  {
-    name: "soy",
-    type: "allergy"
-  },
-  {
-    name: "snack",
-    type: "course"
-  },
-  {
-    name: "dinner",
-    type: "course"
-  },
-  {
-    name: "mediterranean",
-    type: "cuisine"
-  },
-  {
-    name: "dairy",
-    type: "allergy"
-  }
-];
-
+//INTIALIZATION OF OBJECTS TO BE SEEDED - ONES THAT ARE EXTERNAL AND NEED TO BE CHANGED
 const ingredients = [];
-
 const recipes = [];
 
+// SEEDING FUNCTIONS
+function seedIngredients() {
+    createIngreObj();
+    ingredientModel.insertMany(ingredients);
+  }
+  
+  function seedRecipes(callbk) {
+      recipeModel.insertMany(cleanTheRecipes(recipeDetails));
+  }
+  
+  function seedUsers(users){
+      userModel.insertMany(users)
+  }
+    
+  function seedTags(tags){
+      tagModel.insertMany(tags)
+  }
+
+//FUNCTIONS THAT CHANGE THE EXTERNAL DATA
 function createIngreObj() {
   ingredientNames.forEach(name => ingredients.push({ name: name, image: "" }));
 }
 
-// function cleanTheRecipes(recipeDetails) {
-//   recipesToClean.forEach(recipe => {
-//     const cleanRecipe = {};
-//     cleanRecipe.title = recipe.title;
-//     cleanRecipe.image = recipe.image;
-//     cleanRecipe.ingredients = [
-//         recipe.missedIngredients && recipe.missedIngredients.filter(ingredient => ingredient.name)
-//     ];
-//     cleanRecipe.ingredients.push(
-//         recipe.usedIngredients && recipe.usedIngredients.filter(ingredient => ingredient.name)
-//     );
-//     cleanRecipe.ingredients.flat();
-//     const match = recipeDetails.filter(details => details.id === recipe.id)[0];
-//     cleanRecipe.readyTime = match.readyTime;
-//     recipes.push(cleanRecipe);
-//   });
-// }
-
-function seedIngredients() {
-  createIngreObj();
-  ingredientModel.insertMany(ingredients);
+function cleanTheRecipes(recipeDetails) {
+  recipesToClean.forEach(recipe => {
+    const cleanRecipe = {};
+    cleanRecipe.title = recipe.title;
+    cleanRecipe.image = recipe.image;
+    cleanRecipe.ingredients =
+        recipe.missedIngredients && recipe.missedIngredients.map(ingredient => ingredient.name);
+    cleanRecipe.ingredients.push(
+        ...recipe.usedIngredients && recipe.usedIngredients.map(ingredient => ingredient.name)
+    );
+    // get details
+    let match = recipeDetails.find(details => details.id === recipe.id)
+    let tags = match.cuisines;
+    tags.push(...match.dishTypes)
+    tags.push(...match.diets)
+    cleanRecipe.tags = [...tags];
+    cleanRecipe.instructions = match.analyzedInstructions;
+    
+    recipes.push(cleanRecipe);
+    
+  });
+  return recipes
 }
 
-// RUNNING THE CLEAN BASED ON THE 
+// SEED FUNCTION CALLS
+seedIngredients()
+seedTags(tagSeeds)
+seedUsers(userSeeds)
+seedRecipes(cleanTheRecipes(recipeDetails)) 
+
+// ===== RUNNING THE CLEAN BASED ON THE =====
+// ===== wILL BECOME A HELPER THAT IS CALLED BY OBJECTS =====
+
 // async function getAPIData(clbk) {
 //     try {
 //       const apiResult = await axios.get(
@@ -104,6 +84,5 @@ function seedIngredients() {
 //       console.error(err);
 //     }
 //   }
-seedIngredients() 
-
 // getAPIData(cleanTheRecipes)
+

@@ -5,13 +5,13 @@ const Schema = mongoose.Schema;
 const recipeSchema = new Schema({
     ingredients: [
         {
-            type: String,
-            required: true
+            type: String
+            // required: true
         }
     ],
     instructions: [
         {
-            type: String,
+            type: Object,
             required: false
         }
     ],
@@ -28,23 +28,6 @@ const recipeSchema = new Schema({
     servings: {type: Number}
 })
 
-// calories
-
 const Recipe = mongoose.model("Recipe", recipeSchema);
 
 module.exports = Recipe;
-
-
-
-// recipeDetails = []
-
-// recipeDetails.forEach(details => {
-//     const tags = []
-//     const servings = []
-//     tags.push(details.cuisines)
-//     tags.push(details.dishTypes)
-//     tags.push(details.diets)
-//     tags.flat()
-//     // time = 
-
-// })

@@ -1,5 +1,4 @@
 const recipesToClean = [
-    [
         {
             "id": 539355,
             "title": "Beans with Toasted Garlic and Chili",
@@ -875,6 +874,5 @@ const recipesToClean = [
             "likes": 0
         }
     ]
-]
 
 module.exports = recipesToClean;

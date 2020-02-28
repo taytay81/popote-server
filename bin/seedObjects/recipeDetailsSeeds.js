@@ -1,5 +1,4 @@
 const recipesDetailSeed = [
-    [
         {
             "vegetarian": true,
             "vegan": true,
@@ -2848,5 +2847,4 @@ const recipesDetailSeed = [
             "creditsText": null
         }
     ]
-]
 module.exports = recipesDetailSeed;
