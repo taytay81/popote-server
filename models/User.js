@@ -18,6 +18,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  readyInMinutes: {
+    type: Number,
+    default: 25
+  },
   tags: {
     type: []
   },
