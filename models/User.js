@@ -18,14 +18,16 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  readyInMinutes: {
-    type: Number,
-    default: 25
-  },
+
   tags: {
     type: []
   },
-  favorites: [{ type: Schema.Types.ObjectId, ref: "recipes" }]
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Recipe"
+    }
+  ]
 });
 
 const User = mongoose.model("User", userSchema);
