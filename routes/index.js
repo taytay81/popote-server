@@ -26,6 +26,27 @@ router.get("/ingredients", function(req, res) {
       console.log(err);
     });
 });
+/*get recipe page detail */
+router.get("/recipe/:recipeId", function(req, res) {
+  RecipeModel.findById(req.params.recipeId)
+    .then(recipe => {
+      res.status(200).json(recipe);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+/*get all recipes available in the database */
+router.get("/recipes", function(req, res) {
+  RecipeModel.find(req.params.recipeId)
+    .then(recipes => {
+      res.status(200).json(recipes);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 /* GET favorite recipes */
 router.get("/favorites/:userId", (req, res) => {
