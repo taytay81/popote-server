@@ -6,7 +6,11 @@ const userSchema = new Schema({
     type: String,
     default: "https://cdn.onlinewebfonts.com/svg/img_258083.png"
   },
-  name: {
+  firstname: {
+    type: String,
+    required: true
+  },
+  lastname: {
     type: String,
     required: true
   },
