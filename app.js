@@ -1,9 +1,15 @@
+const _DEVMODE = true;
+
 require("dotenv").config();
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
+require("./config/passport");
+const passport = require("passport");
+
+
 require("./config/mongo");
 
 var indexRouter = require("./routes/index.js");
@@ -13,6 +19,8 @@ var authRouter = require("./routes/auth.js")
 
 var app = express();
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,8 +35,21 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-// cors middle on
 app.use(cors(corsOptions));
+
+if (_DEVMODE === true) {
+  app.use(function devMode(req, res, next) {
+      req.user = {
+        _id: "5e5d1ee21db32c5a287b4636",
+        lastname: "Turtle",
+        firstname: "Pierre",
+        email: "admin@popote.io"
+      }
+      next();
+    });
+}
+
+// cors middle on
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
