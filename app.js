@@ -16,6 +16,7 @@ var indexRouter = require("./routes/index.js");
 var usersRouter = require("./routes/users.js");
 var tagRouter = require("./routes/tags.js")
 var authRouter = require("./routes/auth.js")
+var reviewRouter = require("./routes/review.js")
 
 var app = express();
 
@@ -55,5 +56,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/tags", tagRouter);
 app.use("/auth", authRouter);
+app.use("/review", reviewRouter);
 
 module.exports = app;
