@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const recipeSchema = new Schema({
+  originId: { type: Number },
   ingredients: [
     {
       type: String
@@ -24,7 +25,8 @@ const recipeSchema = new Schema({
   },
   readyTime: { type: Number, default: 25 },
   tags: [],
-  servings: { type: Number }
+  servings: { type: Number },
+  summary: { type: String }
 });
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
