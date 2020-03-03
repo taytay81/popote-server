@@ -81,7 +81,7 @@ seedRecipes(cleanTheRecipes(recipeDetails));
 // async function getAPIData(clbk) {
 //   try {
 //     const apiResult = await axios.get(
-//       "https://api.spoonacular.com/recipes/informationBulk?ids=539355,256051,202146,696050,600343,113568,25116,379457,419475,163591&apiKey=350a17dd25c84822b1ed7c1878ffd679"
+//       "https://api.spoonacular.com/recipes/informationBulk?ids=539355,256051,202146,696050,600343,113568,25116,379457,419475,163591&apikey="
 //     );
 //     console.log(apiResult.data);
 //     clbk(apiResult.data);

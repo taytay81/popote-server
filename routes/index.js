@@ -10,7 +10,6 @@ router.get("/", function(req, res, next) {
   tagModel
     .find()
     .then(apiRes => {
-      console.log(apiRes);
       res.status(200).json({ apiRes });
     })
     .catch(apiErr => console.error(apiRes));
@@ -46,6 +45,40 @@ router.get("/recipes", function(req, res) {
     .catch(err => {
       console.log(err);
     });
+});
+// get all the recipes matching the summary or ingredients need to see
+
+router.get("/recipes/ingredients", function(req, res, next) {
+  const ingredients = req.query.ingredients.split(",");
+
+  const promises = ingredients.map(i => {
+    const regex = new RegExp(i, "gi");
+    return RecipeModel.find({ summary: { $regex: regex } });
+  });
+
+  Promise.all(promises)
+    .then(recipes => {
+      const uniquifiedFlattenReceipes = [...new Set(recipes.flat())];
+      res.status(200).json(uniquifiedFlattenReceipes);
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
+// find recipes by tag name
+router.get("/recipes/tag/tagname", function(req, res, next) {
+  const ingredient = req.body;
+  //console.log("fffff", req.params.);
+
+  /*
+  RecipeModel.find({ summary: { $in: { $regex: regexingredient} } })
+    .then(recipes => {
+      res.status(200).json(recipes);
+    })
+    .catch(err => {
+      console.log(err);
+    });*/
 });
 
 /* GET favorite recipes */
