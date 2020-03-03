@@ -43,15 +43,15 @@ router.post("/signup", uploader.single("avatar"), (req, res, next) => {
 router.use("/is-loggedin", (req, res, next) => {
     if (req.isAuthenticated()) {
       // method provided by passport
-      const { _id, username, favorites, email, avatar, role } = req.user;
+      const { _id, lastname, firstname, favorites, email, avatar } = req.user;
       return res.status(200).json({
         currentUser: {
           _id,
-          username,
+          lastname,
+          firstname,
           email,
           avatar,
           favorites,
-          role
         }
       });
     }
@@ -76,16 +76,16 @@ router.post("/login", (req, res, next) => {
         // You may find usefull to send some other infos
         // dont send sensitive informations back to the client
         // let's choose the exposed user below
-        const { _id, username, email, favorites, avatar, role } = user;
+        const { _id, lastname,firstname, email, favorites, avatar } = user;
         // and only expose non-sensitive inofrmations to the client's state
         next(
           res.status(200).json({
             currentUser: {
               _id,
-              username,
+              lastname,
+              firstname,
               email,
               avatar,
-              role,
               favorites
             }
           })
@@ -98,5 +98,6 @@ router.post("/login", (req, res, next) => {
     req.logout(); // utility function provided by passport
     res.json({ message: "Success" });
   });
+
 
 module.exports = router;

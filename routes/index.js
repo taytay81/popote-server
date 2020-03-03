@@ -10,7 +10,6 @@ router.get("/", function(req, res, next) {
   tagModel
     .find()
     .then(apiRes => {
-      console.log(apiRes);
       res.status(200).json({ apiRes });
     })
     .catch(apiErr => console.error(apiRes));

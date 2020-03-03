@@ -1,15 +1,17 @@
 const users = [
   {
     avatar: "",
-    name: "andrew",
+    lastname: "Biberon",
+    firstname: "Andrew",
     email: "and@pot.com",
-    password: 123,
+    password: "123",
     tags: [],
     favorites: []
   },
   {
     avatar: "",
-    name: "taytay",
+    firstname: "taytay",
+    lastname: "Iforgot",
     email: "tay@pot.com",
     password: "321",
     tags: [],
@@ -17,9 +19,10 @@ const users = [
   },
   {
     avatar: "",
-    name: "pierre",
-    email: "try@pot.com",
-    password: 213,
+    firstname: "Pierro",
+    lastname: "Tryhard",
+    email: "admin@popote.io",
+    password: "12345",
     tags: [],
     favorites: []
   }

@@ -8,7 +8,6 @@ router.get("/", function(req, res) {
   tagModel
     .find()
     .then(apiRes => {
-      console.log(apiRes);
       res.status(200).json({ apiRes });
     })
     .catch(apiErr => console.error(apiErr));
@@ -26,20 +25,6 @@ router.get("/tagname/:tagname", function(req, res, next) {
     .catch(err => {
       next(err);
     });
-  /*
-    const promises = ingredients.map(i => {
-      const regex = new RegExp(i, "gi");
-      return RecipeModel.find({ summary: { $regex: regex } });
-    });
-  
-    Promise.all(promises)
-      .then(recipes => {
-        const uniquifiedFlattenReceipes = [...new Set(recipes.flat())];
-        res.status(200).json(uniquifiedFlattenReceipes);
-      })
-      .catch(err => {
-        next(err);
-      });*/
 });
 
 module.exports = router;

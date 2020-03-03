@@ -1,4 +1,4 @@
-const _DEVMODE = true;
+const _DEVMODE = false;
 
 require("dotenv").config();
 var express = require("express");
@@ -8,6 +8,7 @@ var logger = require("morgan");
 const cors = require("cors");
 require("./config/passport");
 const passport = require("passport");
+const session = require("express-session")
 
 
 require("./config/mongo");
@@ -18,13 +19,25 @@ var tagRouter = require("./routes/tags.js")
 var authRouter = require("./routes/auth.js")
 
 var app = express();
+app.use(cookieParser());
+
+
+app.use(
+  session({
+    cookie: { secure: false, maxAge: 4 * 60 * 60 * 1000 }, // 4 hours
+    resave: true,
+    saveUninitialized: true,
+    secret: process.env.SECRET_SESSION
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, "public")));
 
 // this rule allows the client app to exchange via http via the server (AJAX ... Axios)
@@ -55,5 +68,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/tags", tagRouter);
 app.use("/auth", authRouter);
+
 
 module.exports = app;
