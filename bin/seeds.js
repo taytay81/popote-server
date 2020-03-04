@@ -61,9 +61,10 @@ function cleanTheRecipes(recipeDetails) {
     cleanRecipe.tags = [...tags];
     cleanRecipe.readyTime = match.readyInMinutes;
     cleanRecipe.servings = match.servings;
-    cleanRecipe.instructions = match.analyzedInstructions;
+    cleanRecipe.instructions =
+      match.analyzedInstructions[0] && match.analyzedInstructions[0].steps;
     cleanRecipe.summary = match.summary;
-    cleanRecipe.rating = 4
+    cleanRecipe.rating = 4;
 
     recipes.push(cleanRecipe);
   });
