@@ -63,6 +63,7 @@ function cleanTheRecipes(recipeDetails) {
     cleanRecipe.servings = match.servings;
     cleanRecipe.instructions = match.analyzedInstructions;
     cleanRecipe.summary = match.summary;
+    cleanRecipe.rating = 4
 
     recipes.push(cleanRecipe);
   });

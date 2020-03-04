@@ -1,4 +1,4 @@
-const _DEVMODE = false;
+const _DEVMODE = true;
 
 require("dotenv").config();
 var express = require("express");
@@ -69,7 +69,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/tags", tagRouter);
 app.use("/auth", authRouter);
-app.use("/review", reviewRouter);
+app.use("/reviews", reviewRouter);
 
 
 module.exports = app;
