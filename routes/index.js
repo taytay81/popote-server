@@ -66,20 +66,7 @@ router.get("/recipes/ingredients", function(req, res, next) {
     });
 });
 
-// find recipes by tag name
-router.get("/recipes/tag/tagname", function(req, res, next) {
-  const ingredient = req.body;
-  //console.log("fffff", req.params.);
 
-  /*
-  RecipeModel.find({ summary: { $in: { $regex: regexingredient} } })
-    .then(recipes => {
-      res.status(200).json(recipes);
-    })
-    .catch(err => {
-      console.log(err);
-    });*/
-});
 
 /* GET favorite recipes */
 router.get("/favorites/:userId", (req, res) => {
