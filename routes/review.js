@@ -8,5 +8,10 @@ router.get("/", (req, res, next) => {
     .catch(err => console.log(err))
 })
 
+router.post("/create/:recipe_id", (req, res) => {
+    let recipeId = req.params.recipeId
+    res.status(200).send(recipeId)
+})
+
 
 module.exports = router;
