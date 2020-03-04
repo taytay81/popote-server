@@ -1,12 +1,13 @@
 const mongoose = require("mongoose")
-const Schema = new mongoose.Schema
+const Schema = mongoose.Schema
+
 
 const reviewSchema = new Schema({
     body: {
         type: String,
         required: true
     },
-    recipeId: {
+    recipeId: { 
         type: String,
         required: true
     },
@@ -16,9 +17,9 @@ const reviewSchema = new Schema({
         required: true
     },
     rating: {
-        type: Number,
-        required: true
-    }
+        type: Schema.Types.Decimal128
+    },
+    ratingCount: {type: Number}
 })
 
 const Review = mongoose.model("Review", reviewSchema)

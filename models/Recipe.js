@@ -25,7 +25,9 @@ const recipeSchema = new Schema({
   readyTime: { type: Number, default: 25 },
   tags: [],
   servings: { type: Number },
-  summary: { type: String }
+  summary: { type: String },
+  rating: { type: Number, default: 4 },
+  ratingCount:  { type: Number, default: 1 }
 });
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
