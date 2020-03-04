@@ -1,26 +1,25 @@
-const _DEVMODE = true;
-
 require("dotenv").config();
+require("./config/mongo");
+require("./config/passport");
+
 var express = require("express");
-var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
-require("./config/passport");
+
 const passport = require("passport");
 const session = require("express-session")
 
+const _DEVMODE = false;
 
-require("./config/mongo");
 
-var indexRouter = require("./routes/index.js");
-var usersRouter = require("./routes/users.js");
-var tagRouter = require("./routes/tags.js")
-var authRouter = require("./routes/auth.js")
-var reviewRouter = require("./routes/review.js")
+
 
 var app = express();
 app.use(cookieParser());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 
 app.use(
@@ -32,15 +31,6 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.use(express.static(path.join(__dirname, "public")));
-
 // this rule allows the client app to exchange via http via the server (AJAX ... Axios)
 const corsOptions = {
   origin: [process.env.CLIENT_URL],
@@ -50,6 +40,12 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 if (_DEVMODE === true) {
   app.use(function devMode(req, res, next) {
@@ -64,6 +60,11 @@ if (_DEVMODE === true) {
 }
 
 // cors middle on
+var indexRouter = require("./routes/index.js");
+var usersRouter = require("./routes/users.js");
+var tagRouter = require("./routes/tags.js")
+var authRouter = require("./routes/auth.js")
+var reviewRouter = require("./routes/review.js")
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

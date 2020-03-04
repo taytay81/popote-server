@@ -6,98 +6,99 @@ const uploader = require("./../config/cloudinary");
 const passport = require("passport");
 
 router.post("/signup", uploader.single("avatar"), (req, res, next) => {
-    // console.log("file ?", req.file);
-    // console.log(req.body);
-    var errorMsg = "";
-    const { lastname, firstname, password, email } = req.body;
-    // @todo : best if email validation here or check with a regex in the User model
-    if (!password || !email) errorMsg += "Provide email and password.\n";
-    
-    if (errorMsg) return res.status(403).json(errorMsg); // 403	Forbidden
-  
-    const salt = bcrypt.genSaltSync(10);
-    // more on encryption : https://en.wikipedia.org/wiki/Salt_(cryptography)
-    const hashPass = bcrypt.hashSync(password, salt);
-  
-    const newUser = {
-      lastname,
-      firstname,
-      email,
-      password: hashPass
-    };
+  // console.log("file ?", req.file);
+  // console.log(req.body);
+  var errorMsg = "";
+  const { lastname, firstname, password, email } = req.body;
+  // @todo : best if email validation here or check with a regex in the User model
+  if (!password || !email) errorMsg += "Provide email and password.\n";
 
-    // check if an avatar FILE has been posted
-    if (req.file) newUser.avatar = req.file.secure_url;
+  if (errorMsg) return res.status(403).json(errorMsg); // 403	Forbidden
 
-    userModel
-        .create(newUser)
-        .then(newUserFromDB => {
-        res.status(200).json({msg: "signup ok"});
-        })
-        .catch(err => {
-        console.log("signup error", err);
-        next(err);
+  const salt = bcrypt.genSaltSync(10);
+  // more on encryption : https://en.wikipedia.org/wiki/Salt_(cryptography)
+  const hashPass = bcrypt.hashSync(password, salt);
+
+  const newUser = {
+    lastname,
+    firstname,
+    email,
+    password: hashPass
+  };
+
+  // check if an avatar FILE has been posted
+  if (req.file) newUser.avatar = req.file.secure_url;
+
+  userModel
+    .create(newUser)
+    .then(newUserFromDB => {
+      res.status(200).json({ msg: "signup ok" });
+    })
+    .catch(err => {
+      console.log("signup error", err);
+      next(err);
     });
 });
 
 router.use("/is-loggedin", (req, res, next) => {
-    if (req.isAuthenticated()) {
-      // method provided by passport
-      const { _id, lastname, firstname, favorites, email, avatar } = req.user;
-      return res.status(200).json({
+  if (req.isAuthenticated()) {
+    // method provided by passport
+    const { _id, lastname, firstname, favorites, email, avatar } = req.user;
+    return res.status(200).json({
+      currentUser: {
+        _id,
+        lastname,
+        firstname,
+        email,
+        avatar,
+        favorites
+      }
+    });
+  }
+  res.status(403).json("Unauthorized");
+});
+
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, failureDetails) => {
+    if (err || !user) return res.status(403).json("invalid user infos"); // 403 : Forbidden
+
+    /**
+     * req.Login is a passport method
+     * check the doc here : http://www.passportjs.org/docs/login/
+     */
+    req.logIn(user, function(err) {
+
+      /* doc says: When the login operation completes, user will be assigned to req.user. */
+      if (err) {
+        return res.json({ message: "Something went wrong logging in" });
+      }
+
+      // We are now logged in
+      // You may find usefull to send some other infos
+      // dont send sensitive informations back to the client
+      // let's choose the exposed user below
+
+      const { _id, lastname, firstname, email, favorites, avatar } = user;
+      // and only expose non-sensitive inofrmations to the client's state
+
+      res.status(200).json({
         currentUser: {
           _id,
           lastname,
           firstname,
           email,
           avatar,
-          favorites,
+          favorites
         }
       });
-    }
-    res.status(403).json("Unauthorized");
-  });
+      next();
+    });
+  })(req, res, next); // IIFE (module) pattern here (see passport documentation)
+});
 
-router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, failureDetails) => {
-      if (err || !user) return res.status(403).json("invalid user infos"); // 403 : Forbidden
-  
-      /**
-       * req.Login is a passport method
-       * check the doc here : http://www.passportjs.org/docs/login/
-       */
-      req.logIn(user, function(err) {
-        /* doc says: When the login operation completes, user will be assigned to req.user. */
-        if (err) {
-          return res.json({ message: "Something went wrong logging in" });
-        }
-  
-        // We are now logged in
-        // You may find usefull to send some other infos
-        // dont send sensitive informations back to the client
-        // let's choose the exposed user below
-        const { _id, lastname,firstname, email, favorites, avatar } = user;
-        // and only expose non-sensitive inofrmations to the client's state
-        next(
-          res.status(200).json({
-            currentUser: {
-              _id,
-              lastname,
-              firstname,
-              email,
-              avatar,
-              favorites
-            }
-          })
-        );
-      });
-    })(req, res, next); // IIFE (module) pattern here (see passport documentation)
-  });
-
-  router.post("/signout", (req, res, next) => {
-    req.logout(); // utility function provided by passport
-    res.json({ message: "Success" });
-  });
-
+router.post("/signout", (req, res, next) => {
+  req.logout(); // utility function provided by passport
+  res.json({ message: "Success" });
+});
 
 module.exports = router;
