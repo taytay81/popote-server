@@ -16,8 +16,7 @@ const recipeSchema = new Schema({
     }
   ],
   image: {
-    type: String,
-    default: "https://cdn.onlinewebfonts.com/svg/img_258083.png"
+    type: String
   },
   title: {
     type: String,

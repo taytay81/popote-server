@@ -66,8 +66,6 @@ router.get("/recipes/ingredients", function(req, res, next) {
     });
 });
 
-
-
 /* GET favorite recipes */
 router.get("/favorites/:userId", (req, res) => {
   UserModel.findById(req.params.userId)
@@ -80,8 +78,29 @@ router.get("/favorites/:userId", (req, res) => {
     });
 });
 
-/*FIND AND UPDATE favorite recipes */
+/*FIND AND add  favorite recipes */
 router.patch("/favorites/:userId/:recipeId", (req, res, next) => {
+  console.log("userId", req.params.userId);
+  console.log("recipeId", req.params.recipeId);
+  UserModel.findByIdAndUpdate(
+    req.params.userId,
+    {
+      $push: { favorites: req.params.recipeId }
+    },
+    {
+      new: true
+    }
+  )
+    .then(dbRes => {
+      console.log(dbRes);
+      res.status(200).json(dbRes);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+router.delete("/favorites/:userId/:recipeId", (req, res, next) => {
   console.log("userId", req.params.userId);
   console.log("recipeId", req.params.recipeId);
   UserModel.findByIdAndUpdate(
