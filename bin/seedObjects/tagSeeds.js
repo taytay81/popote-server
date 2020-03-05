@@ -1,27 +1,23 @@
 const tags = [
   {
-    name: "vegetarian",
+    name: "vegan",
     type: "diet"
   },
   {
-    name: "soy",
-    type: "allergy"
+    name: "gluten free",
+    type: "diet"
   },
   {
-    name: "snack",
+    name: "side dish",
     type: "course"
   },
   {
-    name: "dinner",
-    type: "course"
+    name: "salad",
+    type: "healthy"
   },
   {
-    name: "mediterranean",
-    type: "cuisine"
-  },
-  {
-    name: "dairy",
-    type: "allergy"
+    name: "primal",
+    type: "diet"
   }
 ];
 
