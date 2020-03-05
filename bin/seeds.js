@@ -23,7 +23,7 @@ function seedIngredients() {
   ingredientModel.insertMany(ingredients);
 }
 
-function seedRecipes(callbk) {
+function seedRecipes() {
   recipeModel.insertMany(cleanTheRecipes(recipeDetails));
 }
 
@@ -75,7 +75,7 @@ function cleanTheRecipes(recipeDetails) {
 seedIngredients();
 seedTags(tagSeeds);
 seedUsers(userSeeds);
-seedRecipes(cleanTheRecipes(recipeDetails));
+seedRecipes();
 
 // ===== RUNNING THE CLEAN BASED ON THE =====
 // ===== wILL BECOME A HELPER THAT IS CALLED BY OBJECTS =====
